@@ -9,8 +9,8 @@ Additionally, it emphasizes that you must
 before you can implement a solution to the problem in Python. 
   
 Authors: David Mutchler, Dave Fisher, Valerie Galluzzi, Amanda Stouder,
-         their colleagues and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+         their colleagues and Adi Sethupathy.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import rosegraphics as rg
 
@@ -27,8 +27,8 @@ import rosegraphics as rg
 # ----------------------------------------------------------------------
 def main():
     """ Calls the   TEST   functions in this module. """
-    run_test_draw_squares_from_circle()
-    run_test_draw_circles_from_rectangle()
+    #run_test_draw_squares_from_circle()
+    #run_test_draw_circles_from_rectangle()
     run_test_draw_lines_from_rectangles()
 
 
@@ -98,7 +98,7 @@ def draw_squares_from_circle(n, circle, window):
       :type window: rg.RoseWindow
     """
     # ------------------------------------------------------------------
-    # TODO: 2. Implement and test this function.
+    # DONE: 2. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -111,6 +111,17 @@ def draw_squares_from_circle(n, circle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    circle.attach_to(window)
+    length = circle.radius * 2
+    square = rg.Square(circle.center, length)
+    square.attach_to(window)
+    for k in range(n+1):
+        center_x = circle.center.x + k*circle.radius
+        center_y = circle.center.y + k*circle.radius
+        center = rg.Point(center_x, center_y)
+        newSquare = rg.Square(center, length)
+        newSquare.attach_to(window)
+        window.render()
 
 
 def run_test_draw_circles_from_rectangle():
@@ -122,7 +133,7 @@ def run_test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # ------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # DONE: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -134,6 +145,18 @@ def run_test_draw_circles_from_rectangle():
     #   Follow the same form as the example in a previous problem.
     ####################################################################
     # ------------------------------------------------------------------
+    title = 'Tests 1 and 2 of draw circles from rectangle: '
+    window1 = rg.RoseWindow(650, 350, title)
+
+    # Test 1:
+    rectangle = rg.Rectangle(rg.Point(300,300), rg.Point(500,200))
+    draw_circles_from_rectangle(3,2,rectangle,window1)
+
+    # Test 2:
+    rectangle = rg.Rectangle(rg.Point(10,10), rg.Point(30,30))
+    draw_circles_from_rectangle(4,6,rectangle,window1)
+    window1.close_on_mouse_click()
+
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
@@ -176,7 +199,7 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
       :type window: rg.RoseWindow
     """
     # ------------------------------------------------------------------
-    # TODO: 4. Implement and test this function.
+    # DONE: 4. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -189,6 +212,30 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    rectangle.outline_color = 'red'
+    rectangle.fill_color = 'blue'
+    rectangle.attach_to(window)
+
+    for k in range(m+1):
+        radius = ((rectangle.corner_1.y - rectangle.corner_2.y)/2)
+        center_x = rectangle.corner_1.x - radius*(2*(k+0.5))
+        center_y = ((rectangle.corner_1.y + rectangle.corner_2.y)/2)
+        center = rg.Point(center_x, center_y)
+        circle = rg.Circle(center, radius)
+        circle.fill_color = 'blue'
+        circle.attach_to(window)
+        window.render()
+
+    for k in range(n+1):
+        radius = ((rectangle.corner_1.x - rectangle.corner_2.x)/2)
+        center_x = ((rectangle.corner_1.x + rectangle.corner_2.x)/2)
+        center_y = rectangle.corner_1.y + radius*(2*(k+1))
+        center = rg.Point(center_x,center_y)
+        circle = rg.Circle(center, radius)
+        circle.outline_color = 'red'
+        circle.attach_to(window)
+        window.render()
+
 
 
 def run_test_draw_lines_from_rectangles():
@@ -268,7 +315,7 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type window: rg.RoseWindow
       """
     # ------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # DONE: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -281,6 +328,22 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
+    p1 = ((rectangle1.corner_1.x + rectangle1.corner_2.x)/2, (rectangle1.corner_1.y + rectangle1.corner_2.y)/2)
+    p2 = ((rectangle2.corner_1.x + rectangle2.corner_2.x)/2, (rectangle2.corner_1.y + rectangle2.corner_2.y)/2)
+    line = rg.Line(p1, p2)
+    line.attach_to(window)
+    for k in range(n+1):
+        p1_x = p1.x-(rectangle1.corner_2.x - rectangle1.corner_1.x)/2*(k+1)
+        p1_y = p1.y - (rectangle1.corner_2.y - rectangle1.corner_1.y)/2*(k+1)
+        p1 = rg.Point(p1_x,p1_y)
+        p2_x = p2.x-(rectangle2.corner_2.x - rectangle2.corner_1.x)/2*(k+1)
+        p2_y =  p2.y-(rectangle2.corner_2.y - rectangle2.corner_1.y)/2*(k+1)
+        p2 = rg.Point(p2_x,p2_y)
+        line = rg.Line(p1,p2)
+        line.attach_to(window)
+        window.render(())
 
 
 # ----------------------------------------------------------------------
